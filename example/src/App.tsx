@@ -1,31 +1,253 @@
-import * as React from 'react';
+import Kidozads from 'react-native-kidozads';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-kidozads';
+import React, {useState} from 'react';
+import {Platform, StyleSheet, Text, View} from 'react-native';
+import AppButton from './AppButton';
+import 'react-native-gesture-handler';
+import {NavigationContainer} from "@react-navigation/native";
 
-export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+var adLoadState = {
+  notLoaded: 'NOT_LOADED',
+  loading: 'LOADING',
+  loaded: 'LOADED',
+};
 
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
+var adsShowState = {
+  notStarted: 'NOT_STARTED',
+  completed: 'COMPLETED',
+  failed: 'FAILED',
+  start: 'STARTED',
+  click: 'CLICKED',
+};
+
+const App = () => {
+
+  // GameID
+  const PID = Platform.select({
+    ios: '8',
+    android: '8',
+  });
+
+  const TOKEN = Platform.select({
+    ios: 'QVBIh5K3tr1AxO4A1d4ZWx1YAe5567os',
+    android: 'QVBIh5K3tr1AxO4A1d4ZWx1YAe5567os',
+  });
+
+  /*const INTERSTITIAL_AD_UNIT_ID = Platform.select({
+    ios: 'DefaultInterstitial',
+    android: 'DefaultInterstitial',
+  });
+
+  const REWARDED_AD_UNIT_ID = Platform.select({
+    ios: 'DefaultRewardedVideo',
+    android: 'DefaultRewardedVideo',
+  });
+
+  const BANNER_AD_UNIT_ID = Platform.select({
+    ios: 'DefaultBanner',
+    android: 'DefaultBanner',
+  });*/
+
+  // Create states
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [interstitialAdLoadState, setInterstitialAdLoadState] = useState(adLoadState.notLoaded);
+  const [KidozadshowCompleteState, setKidozadshowCompleteState] = useState(adsShowState.notStarted);
+  const [interstitialRetryAttempt, setInterstitialRetryAttempt] = useState(0);
+  const [rewardedAdLoadState, setRewardedAdLoadState] = useState(adLoadState.notLoaded);
+  const [isNativeUIBannerShowing, setIsNativeUIBannerShowing] = useState(false);
+  const [statusText, setStatusText] = useState('Initializing SDK...');
+
+
+  Kidozads.initialize(PID, TOKEN, (callback) => { 
+    setIsInitialized(true);
+    logStatus('SDK Initialized: '+ callback);
+
+    // Attach ad listeners for rewarded ads, and banner ads
+    attachAdListeners();
+  });
+
+  function attachAdListeners() {
+    Kidozads.addEventListener('OninterstitialDidFailToLoad', (adInfo) => {
+      logStatus('Ad fail to Loaded ' );
+    });
+
+
+    Kidozads.addEventListener('OninterstitialDidFailToShow', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.completed);
+      logStatus('Ads fail to show: ' +adInfo.error);
+      
+    });
+    Kidozads.addEventListener('OninterstitialDidOpen', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.failed);
+      logStatus('Ads did open');
+      
+    });
+    Kidozads.addEventListener('OninterstitialDidShow', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.start);
+      logStatus('Ads did show  ');
+    });
+    Kidozads.addEventListener('OndidClickInterstitial', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.click);
+      logStatus('Ads did click');
+    });
+    Kidozads.addEventListener('OninterstitialDidClose', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.click);
+      logStatus('Ads did close');
+    });
+
+
+    //reward video Listeners
+    Kidozads.addEventListener('OnrewardedVideoDidFailToShow', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.completed);
+      logStatus('Ads fail to show' );
+      
+    });
+    Kidozads.addEventListener('OnrewardedVideoDidOpen', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.click);
+      logStatus('Ads did open');
+    });
+    Kidozads.addEventListener('OnrewardedVideoDidClose', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.completed);
+      logStatus('closed: ' );
+      
+    });
+    Kidozads.addEventListener('OnrewardedVideoDidStart', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.click);
+      logStatus('Ads did start');
+    });
+    Kidozads.addEventListener('OnrewardedVideoDidEnd', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.click);
+      logStatus('Ads did end');
+    });
+    Kidozads.addEventListener('OnrewardedDidReciveError', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.completed);
+      logStatus('on recive error: ');
+      
+    });
+    Kidozads.addEventListener('OndidReceiveRewardForPlacement', (adInfo) => {
+      //setKidozadshowCompleteState(adsShowState.completed);
+      logStatus('did Receive Reward: ');
+      
+    });
+
+   
+
+    // Banner Ad Listeners
+    Kidozads.addEventListener('OnbannerDidLoad', (adInfo) => {
+      logStatus('Banner ad loaded ');
+      setIsNativeUIBannerShowing(!isNativeUIBannerShowing);
+    });
+    Kidozads.addEventListener('OnbannerDidReciveError', (adInfo) => {
+      logStatus('Banner did recive error ' );
+    });
+    Kidozads.addEventListener('OnbannerDidFailToLoad', (adInfo) => {
+      logStatus('Banner ad fail to loaded ' +adInfo.error);
+    });
+    Kidozads.addEventListener('OnbannerDidOpen', (Info) => {
+      logStatus('Banner will present screen ');
+    });
+    Kidozads.addEventListener('OndidClickBanner', (adInfo) => {
+      logStatus('Banner ad clicked');
+    });
+    Kidozads.addEventListener('OnbannerDidClose', (adInfo) => {
+      logStatus('Banner full screen content dissmissed');
+    });
+    Kidozads.addEventListener('OnbannerWillLeaveApplication', (adInfo) => {
+      logStatus('Called when a user would be taken out of the application context');
+    });
+
+  }
+
+  function getInterstitialButtonTitle() {
+    if (interstitialAdLoadState === adLoadState.notLoaded) {
+      return 'Load Interstitial';
+    } else if (interstitialAdLoadState === adLoadState.loading) {
+      return 'Loading...';
+    } else {
+      return 'Show Interstitial'; // adLoadState.loaded
+    }
+  }
+
+  function getRewardedButtonTitle() {
+    if (rewardedAdLoadState === adLoadState.notLoaded) {
+      return 'Load Rewarded Ad';
+    } else if (rewardedAdLoadState === adLoadState.loading) {
+      return 'Loading...';
+    } else {
+      return 'Show Rewarded Ad'; // adLoadState.loaded
+    }
+  }
+
+  function logStatus(status) {
+    console.log(status);
+    setStatusText(status);
+  }
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <Text style={styles.statusText}>
+          {statusText}
+        </Text>
+        <AppButton
+          title={getInterstitialButtonTitle()}
+          enabled={
+            isInitialized && interstitialAdLoadState !== adLoadState.loading
+          }
+          onPress={() => {
+            Kidozads.loadInterstitial();
+          }}
+        />
+        <AppButton
+          title='Show Rewarded Ad'
+          enabled={isInitialized && rewardedAdLoadState !== adLoadState.loading}
+          onPress={() => {
+            Kidozads.loadRewardVideo();
+          }}
+        />
+        <AppButton
+          title={isNativeUIBannerShowing ? 'Hide Native UI Banner' : 'Show Native UI Banner'}
+          enabled={isInitialized}
+          onPress={() => {
+            if (isNativeUIBannerShowing) {
+              Kidozads.unLoadBottomBanner();
+            }else{
+              Kidozads.loadBottomBanner();
+            
+            } 
+            
+          }}
+        /> 
+        
+      </View>
+    </NavigationContainer>
   );
-}
+};
+
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 80,
+    flex: 1, // Enables flexbox column layout
   },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+  statusText: {
+    marginBottom: 10,
+    backgroundColor: 'green',
+    padding: 10,
+    fontSize: 20,
+    textAlign: 'center',
   },
+  banner: {
+    // Set background color for banners to be fully functional
+    backgroundColor: '#000000',
+    position: 'absolute',
+    width: '100%',
+    height: 300,
+    bottom: Platform.select({
+      ios: 36, // For bottom safe area
+      android: 0,
+    })
+  }
 });
+
+export default App;

@@ -14,6 +14,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/availasoftNo1/react-native-kidozads.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm}"
+  s.ios.vendored_library = "ios/libKidozSDK.a"
 
   s.dependency "React-Core"
 end

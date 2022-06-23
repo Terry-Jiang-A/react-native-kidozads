@@ -21,7 +21,7 @@ def safeExtGet(prop, fallback) {
 android {
     compileSdkVersion safeExtGet('Kidozads_compileSdkVersion', 29)
     defaultConfig {
-        minSdkVersion safeExtGet('Kidozads_minSdkVersion', 16)
+        minSdkVersion safeExtGet('Kidozads_minSdkVersion', 21)
         targetSdkVersion safeExtGet('Kidozads_targetSdkVersion', 29)
         versionCode 1
         versionName "1.0"
@@ -56,4 +56,6 @@ repositories {
 dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'net.kidoz.sdk:kidoz-android-native:8.9.7'
+    implementation 'org.greenrobot:eventbus:3.2.0'
 }
