@@ -154,7 +154,7 @@ public class KidozadsModule extends ReactContextBaseJavaModule {
           Log.i(TAG, "onClosed: ");
           WritableMap params = Arguments.createMap();
           params.putString( "message", "" );
-          sendReactNativeEvent( "OninterstitialDidClose", params );
+          sendReactNativeEvent( "onInterstitialDidClose", params );
 
         }
 
@@ -164,7 +164,7 @@ public class KidozadsModule extends ReactContextBaseJavaModule {
           Log.i(TAG, "onOpened: ");
           WritableMap params = Arguments.createMap();
           params.putString( "message", "" );
-          sendReactNativeEvent( "OninterstitialDidOpen", params );
+          sendReactNativeEvent( "onInterstitialDidOpen", params );
 
         }
 
@@ -181,7 +181,7 @@ public class KidozadsModule extends ReactContextBaseJavaModule {
           Log.i(TAG, "onLoadFailed: ");
           WritableMap params = Arguments.createMap();
           params.putString( "message", "" );
-          sendReactNativeEvent( "OninterstitialDidFailToLoad", params );
+          sendReactNativeEvent( "onInterstitialDidFailToLoad", params );
 
         }
 
@@ -210,7 +210,7 @@ public class KidozadsModule extends ReactContextBaseJavaModule {
           Log.i(TAG, "onClosed: ");
           WritableMap params = Arguments.createMap();
           params.putString( "message", "" );
-          sendReactNativeEvent( "OnrewardedVideoDidClose", params );
+          sendReactNativeEvent( "onRewardedVideoDidClose", params );
 
         }
 
@@ -220,7 +220,7 @@ public class KidozadsModule extends ReactContextBaseJavaModule {
           Log.i(TAG, "onOpened: ");
           WritableMap params = Arguments.createMap();
           params.putString( "message", "" );
-          sendReactNativeEvent( "OnrewardedVideoDidOpen", params );
+          sendReactNativeEvent( "onRewardedVideoDidOpen", params );
 
         }
 
@@ -237,7 +237,7 @@ public class KidozadsModule extends ReactContextBaseJavaModule {
           Log.i(TAG, "onLoadFailed: ");
           WritableMap params = Arguments.createMap();
           params.putString( "message", "" );
-          sendReactNativeEvent( "OnrewardedDidReciveError", params );
+          sendReactNativeEvent( "onRewardedDidReciveError", params );
 
         }
 
@@ -258,7 +258,7 @@ public class KidozadsModule extends ReactContextBaseJavaModule {
           Log.i(TAG, "onRewardReceived: ");
           WritableMap params = Arguments.createMap();
           params.putString( "message", "" );
-          sendReactNativeEvent( "OndidReceiveRewardForPlacement", params );
+          sendReactNativeEvent( "onDidReceiveRewardForPlacement", params );
 
         }
 
@@ -334,7 +334,7 @@ public class KidozadsModule extends ReactContextBaseJavaModule {
               mKidozBannerView.show();
               WritableMap params = Arguments.createMap();
               params.putString( "message", "" );
-              sendReactNativeEvent( "OnbannerDidLoad", params );
+              sendReactNativeEvent( "onBannerDidLoad", params );
             }
 
             @Override
@@ -343,7 +343,7 @@ public class KidozadsModule extends ReactContextBaseJavaModule {
               Log.d(TAG, "onBannerError(" + errorMsg + ")");
               WritableMap params = Arguments.createMap();
               params.putString( "message", errorMsg );
-              sendReactNativeEvent( "OnbannerDidReciveError", params );
+              sendReactNativeEvent( "onBannerDidReciveError", params );
 
             }
 
@@ -353,7 +353,7 @@ public class KidozadsModule extends ReactContextBaseJavaModule {
               Log.d(TAG, "onBannerClose()");
               WritableMap params = Arguments.createMap();
               params.putString( "message", "" );
-              sendReactNativeEvent( "OnbannerDidClose", params );
+              sendReactNativeEvent( "onBannerDidClose", params );
 
             }
 

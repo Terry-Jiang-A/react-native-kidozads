@@ -26,7 +26,7 @@
 static NSString *const SDK_TAG = @"Kidoz　Sdk";
 static NSString *const TAG = @"Kidoz Ads";
 
-RCTResponseSenderBlock _onInitialized = nil;
+RCTResponseSenderBlock _onKidozAdsInitialized = nil;
 
 static Kidozads *KidozShared; // Shared instance of this bridge module.
 
@@ -74,7 +74,7 @@ RCT_EXPORT_METHOD(initialize :(NSString *)PID :(NSString *)token :(RCTResponseSe
     }
     
     self.pluginInitialized = YES;
-    _onInitialized = callback;
+    _onKidozAdsInitialized = callback;
     
     [[KidozSDK instance]initializeWithPublisherID:PID securityToken:token withDelegate:self];
     
@@ -129,18 +129,18 @@ RCT_EXPORT_METHOD(unLoadBottomBanner)
     [[KidozSDK instance]setBannerPosition:BOTTOM_CENTER];
     
     self.sdkInitialized = YES;
-    _onInitialized(@[@" success"]);
+    _onKidozAdsInitialized(@[@" success"]);
     
 }
 
 -(void)onInitError:(NSString *)error{
     self.sdkInitialized = NO;
-        _onInitialized(@[@"failed: @%", error]);
+        _onKidozAdsInitialized(@[@"failed: @%", error]);
 }
 
 #pragma mark -Banner
 - (void)bannerDidClose {
-    [self sendReactNativeEventWithName: @"OnbannerDidClose" body: nil];
+    [self sendReactNativeEventWithName: @"onBannerDidClose" body: nil];
     
 }
 
@@ -150,27 +150,27 @@ RCT_EXPORT_METHOD(unLoadBottomBanner)
 }
 
 - (void)bannerDidOpen {
-    [self sendReactNativeEventWithName: @"OnbannerDidOpen" body: nil];
+    [self sendReactNativeEventWithName: @"onBannerDidOpen" body: nil];
     
 }
 
 - (void)bannerDidReciveError:(NSString *)errorMessage {
-    [self sendReactNativeEventWithName: @"OnbannerDidReciveError" body: @{@"error" : errorMessage}];
+    [self sendReactNativeEventWithName: @"onBannerDidReciveError" body: @{@"error" : errorMessage}];
     
 }
 
 - (void)bannerIsReady {
     [[KidozSDK instance]showBanner];
-    [self sendReactNativeEventWithName: @"OnbannerDidLoad" body: nil];
+    [self sendReactNativeEventWithName: @"onBannerDidLoad" body: nil];
 }
 
 - (void)bannerLeftApplication {
-    [self sendReactNativeEventWithName: @"OnbannerWillLeaveApplication" body: nil];
+    [self sendReactNativeEventWithName: @"onBannerWillLeaveApplication" body: nil];
     
 }
 
 - (void)bannerLoadFailed {
-    [self sendReactNativeEventWithName: @"OnbannerDidFailToLoad" body: nil];
+    [self sendReactNativeEventWithName: @"onBannerDidFailToLoad" body: nil];
     
 }
 
@@ -189,11 +189,11 @@ RCT_EXPORT_METHOD(unLoadBottomBanner)
 }
 
 -(void)rewardedDidClose{
-    [self sendReactNativeEventWithName: @"OnrewardedVideoDidClose" body: nil];
+    [self sendReactNativeEventWithName: @"onRewardedVideoDidClose" body: nil];
 }
 
 -(void)rewardedDidOpen{
-    [self sendReactNativeEventWithName: @"OnrewardedVideoDidOpen" body: nil];
+    [self sendReactNativeEventWithName: @"onRewardedVideoDidOpen" body: nil];
 }
 
 -(void)rewardedIsReady{
@@ -218,7 +218,7 @@ RCT_EXPORT_METHOD(unLoadBottomBanner)
 
 
 -(void)rewardedDidReciveError:(NSString*)errorMessage{
-    [self sendReactNativeEventWithName: @"OnrewardedDidReciveError" body: @{@"error" : errorMessage}];
+    [self sendReactNativeEventWithName: @"onRewardedDidReciveError" body: @{@"error" : errorMessage}];
     
 }
 
@@ -228,12 +228,12 @@ RCT_EXPORT_METHOD(unLoadBottomBanner)
 }
 
 -(void)rewardedStarted{
-    [self sendReactNativeEventWithName: @"OnrewardedVideoDidStart" body: nil];
+    [self sendReactNativeEventWithName: @"onRewardedVideoDidStart" body: nil];
     
 }
 
 - (void)rewardedLoadFailed {
-    [self sendReactNativeEventWithName: @"OnrewardedVideoDidFailToShow" body: nil];
+    [self sendReactNativeEventWithName: @"onRewardedVideoDidFailToShow" body: nil];
 }
 
 - (void)rewardedLeftApplication {
@@ -247,11 +247,11 @@ RCT_EXPORT_METHOD(unLoadBottomBanner)
 }
 
 -(void)interstitialDidClose{
-    [self sendReactNativeEventWithName: @"OninterstitialDidClose" body: nil];
+    [self sendReactNativeEventWithName: @"onInterstitialDidClose" body: nil];
 }
 
 -(void)interstitialDidOpen{
-    [self sendReactNativeEventWithName: @"OninterstitialDidOpen" body: nil];
+    [self sendReactNativeEventWithName: @"onInterstitialDidOpen" body: nil];
 }
 
 
@@ -278,12 +278,12 @@ RCT_EXPORT_METHOD(unLoadBottomBanner)
 
 
 -(void)interstitialDidReciveError:(NSString*)errorMessage{
-    [self sendReactNativeEventWithName: @"OninterstitialDidFailToLoad" body: @{@"error" : errorMessage}];
+    [self sendReactNativeEventWithName: @"onInterstitialDidFailToLoad" body: @{@"error" : errorMessage}];
     
 }
 
 - (void)interstitialLoadFailed {
-    [self sendReactNativeEventWithName: @"OninterstitialDidFailToLoad" body: nil];
+    [self sendReactNativeEventWithName: @"onInterstitialDidFailToLoad" body: nil];
 }
 
 - (void)interstitialLeftApplication {
@@ -301,28 +301,28 @@ RCT_EXPORT_METHOD(unLoadBottomBanner)
 // From RCTBridgeModule protocol
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"OninterstitialDidFailToLoad",
-             @"OninterstitialDidFailToShow",
+    return @[@"onInterstitialDidFailToLoad",
+             @"onInterstitialDidFailToShow",
              
-             @"OninterstitialDidOpen",
-             @"OninterstitialDidShow",
-             @"OndidClickInterstitial",
-             @"OninterstitialDidClose",
+             @"onInterstitialDidOpen",
+             @"onInterstitialDidShow",
+             @"onDidClickInterstitial",
+             @"onInterstitialDidClose",
              
-             @"OnrewardedVideoDidFailToShow",
-             @"OnrewardedVideoDidOpen",
-             @"OnrewardedVideoDidClose",
-             @"OnrewardedVideoDidStart",
-             @"OndidReceiveRewardForPlacement",
+             @"onRewardedVideoDidFailToShow",
+             @"onRewardedVideoDidOpen",
+             @"onRewardedVideoDidClose",
+             @"onRewardedVideoDidStart",
+             @"onDidReceiveRewardForPlacement",
              
-             @"OnrewardedVideoDidEnd",
-             @"OnrewardedDidReciveError",
-             @"OnbannerDidFailToLoad",
-             @"OnbannerDidLoad",
-             @"OnbannerDidReciveError",
-             @"OnbannerDidOpen",
-             @"OnbannerDidClose",
-             @"OnbannerWillLeaveApplication",];
+             @"onRewardedVideoDidEnd",
+             @"onRewardedDidReciveError",
+             @"onBannerDidFailToLoad",
+             @"onBannerDidLoad",
+             @"onBannerDidReciveError",
+             @"onBannerDidOpen",
+             @"onBannerDidClose",
+             @"onBannerWillLeaveApplication",];
 }
 
 - (void)startObserving

@@ -67,64 +67,64 @@ const App = () => {
   });
 
   function attachAdListeners() {
-    Kidozads.addEventListener('OninterstitialDidFailToLoad', (adInfo) => {
+    Kidozads.addEventListener('onInterstitialDidFailToLoad', (adInfo) => {
       logStatus('Ad fail to Loaded ' );
     });
 
 
-    Kidozads.addEventListener('OninterstitialDidFailToShow', (adInfo) => {
+    Kidozads.addEventListener('onInterstitialDidFailToShow', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.completed);
       logStatus('Ads fail to show: ' +adInfo.error);
       
     });
-    Kidozads.addEventListener('OninterstitialDidOpen', (adInfo) => {
+    Kidozads.addEventListener('onInterstitialDidOpen', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.failed);
       logStatus('Ads did open');
       
     });
-    Kidozads.addEventListener('OninterstitialDidShow', (adInfo) => {
+    Kidozads.addEventListener('onInterstitialDidShow', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.start);
       logStatus('Ads did show  ');
     });
-    Kidozads.addEventListener('OndidClickInterstitial', (adInfo) => {
+    Kidozads.addEventListener('onDidClickInterstitial', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.click);
       logStatus('Ads did click');
     });
-    Kidozads.addEventListener('OninterstitialDidClose', (adInfo) => {
+    Kidozads.addEventListener('onInterstitialDidClose', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.click);
       logStatus('Ads did close');
     });
 
 
     //reward video Listeners
-    Kidozads.addEventListener('OnrewardedVideoDidFailToShow', (adInfo) => {
+    Kidozads.addEventListener('onRewardedVideoDidFailToShow', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.completed);
       logStatus('Ads fail to show' );
       
     });
-    Kidozads.addEventListener('OnrewardedVideoDidOpen', (adInfo) => {
+    Kidozads.addEventListener('onRewardedVideoDidOpen', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.click);
       logStatus('Ads did open');
     });
-    Kidozads.addEventListener('OnrewardedVideoDidClose', (adInfo) => {
+    Kidozads.addEventListener('onRewardedVideoDidClose', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.completed);
       logStatus('closed: ' );
       
     });
-    Kidozads.addEventListener('OnrewardedVideoDidStart', (adInfo) => {
+    Kidozads.addEventListener('onRewardedVideoDidStart', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.click);
       logStatus('Ads did start');
     });
-    Kidozads.addEventListener('OnrewardedVideoDidEnd', (adInfo) => {
+    Kidozads.addEventListener('onRewardedVideoDidEnd', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.click);
       logStatus('Ads did end');
     });
-    Kidozads.addEventListener('OnrewardedDidReciveError', (adInfo) => {
+    Kidozads.addEventListener('onRewardedDidReciveError', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.completed);
       logStatus('on recive error: ');
       
     });
-    Kidozads.addEventListener('OndidReceiveRewardForPlacement', (adInfo) => {
+    Kidozads.addEventListener('onDidReceiveRewardForPlacement', (adInfo) => {
       //setKidozadshowCompleteState(adsShowState.completed);
       logStatus('did Receive Reward: ');
       
@@ -133,26 +133,26 @@ const App = () => {
    
 
     // Banner Ad Listeners
-    Kidozads.addEventListener('OnbannerDidLoad', (adInfo) => {
+    Kidozads.addEventListener('onBannerDidLoad', (adInfo) => {
       logStatus('Banner ad loaded ');
       setIsNativeUIBannerShowing(!isNativeUIBannerShowing);
     });
-    Kidozads.addEventListener('OnbannerDidReciveError', (adInfo) => {
+    Kidozads.addEventListener('onBannerDidReciveError', (adInfo) => {
       logStatus('Banner did recive error ' );
     });
-    Kidozads.addEventListener('OnbannerDidFailToLoad', (adInfo) => {
+    Kidozads.addEventListener('onBannerDidFailToLoad', (adInfo) => {
       logStatus('Banner ad fail to loaded ' +adInfo.error);
     });
-    Kidozads.addEventListener('OnbannerDidOpen', (Info) => {
+    Kidozads.addEventListener('onBannerDidOpen', (Info) => {
       logStatus('Banner will present screen ');
     });
     Kidozads.addEventListener('OndidClickBanner', (adInfo) => {
       logStatus('Banner ad clicked');
     });
-    Kidozads.addEventListener('OnbannerDidClose', (adInfo) => {
+    Kidozads.addEventListener('onBannerDidClose', (adInfo) => {
       logStatus('Banner full screen content dissmissed');
     });
-    Kidozads.addEventListener('OnbannerWillLeaveApplication', (adInfo) => {
+    Kidozads.addEventListener('onBannerWillLeaveApplication', (adInfo) => {
       logStatus('Called when a user would be taken out of the application context');
     });
 
